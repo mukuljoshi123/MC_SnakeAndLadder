@@ -2,14 +2,14 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Board {
 
     List<List<Cell>> cells;
-    List<Snake> snakes;
-    List<Ladder> ladders;
+    Map<Integer,Integer> jumps;
 
-    public Board(List<Snake> snakes, List<Ladder> ladders) {
+    public Board(Map<Integer,Integer> jumps) {
         cells = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             List<Cell> row = new ArrayList<Cell>();
@@ -19,12 +19,13 @@ public class Board {
             }
             cells.add(row);
         }
-        this.snakes = snakes;
-        this.ladders = ladders;
+        this.jumps = jumps;
     }
 
-    public int snakeBite(Cell cell) {
-        return Snake.snakeBite(this.snakes, cell);
+    public int getJumpCell(int cellId) {
+        if(jumps.containsKey(cellId)) {
+            return jumps.get(cellId);
+        }else return cellId;
     }
 
     public List<List<Cell>> getCells() {
@@ -35,19 +36,11 @@ public class Board {
         this.cells = cells;
     }
 
-    public List<Snake> getSnakes() {
-        return snakes;
+    public Map<Integer, Integer> getJumps() {
+        return jumps;
     }
 
-    public void setSnakes(List<Snake> snakes) {
-        this.snakes = snakes;
-    }
-
-    public List<Ladder> getLadders() {
-        return ladders;
-    }
-
-    public void setLadders(List<Ladder> ladders) {
-        this.ladders = ladders;
+    public void setJumps(Map<Integer, Integer> jumps) {
+        this.jumps = jumps;
     }
 }

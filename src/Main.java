@@ -1,11 +1,13 @@
+import controller.dice.Dice;
+import controller.dice.NormalDice;
 import model.Game;
-import model.GameStatus;
 import model.Ladder;
 import model.Snake;
+import optput.GamePrinter;
+import optput.Printer;
+import service.GameService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,20 +15,21 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Number of snakes");
         int noOfSnakes = scanner.nextInt();
+        Dice dice = new NormalDice();
         scanner.nextLine();
-        List<Snake> snakes = new ArrayList<>();
+        Map<Integer, Integer> jumps = new HashMap<>();
         for (int i = 1; i <= noOfSnakes; i++) {
             String[] line = scanner.nextLine().split(" ");
-            snakes.add(new Snake(Integer.parseInt(line[0]), Integer.parseInt(line[1])));
+            Snake snake = new Snake(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
+            jumps.put(snake.getStart(), snake.getEnd());
         }
-        List<Ladder> ladders = new ArrayList<>();
         System.out.println("Enter Number of ladders");
         int noOfLadders = scanner.nextInt();
         scanner.nextLine();
-
         for (int i = 1; i <= noOfLadders; i++) {
             String[] line = scanner.nextLine().split(" ");
-            ladders.add(new Ladder(Integer.parseInt(line[0]), Integer.parseInt(line[1])));
+            Ladder ladder = new Ladder(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
+            jumps.put(ladder.getStart(), ladder.getEnd());
         }
 
         System.out.println("Enter no of Players");
@@ -37,9 +40,9 @@ public class Main {
             String name = scanner.nextLine();
             playerNames.add(name);
         }
-        Game game = new Game(snakes, ladders, playerNames);
-        while (!game.getGameStatus().equals(GameStatus.ENDED)) {
-            game.makeMove();
-        }
+        Game game = new Game(jumps, playerNames);
+        Printer gamePrinter = new GamePrinter();
+        GameService gameService = new GameService(game, gamePrinter, dice);
+        gameService.startGame();
     }
 }

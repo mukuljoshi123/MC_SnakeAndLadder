@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Map;
 
 public class Game {
     Board board;
@@ -9,32 +10,27 @@ public class Game {
     Player winner;
     int currentPlayerNo;
 
-    public Game(List<Snake> snakes, List<Ladder> ladders, List<String> playerNames) {
-        this.board = new Board(snakes, ladders);
+    public Game(Map<Integer, Integer> jumps, List<String> playerNames) {
+        this.board = new Board(jumps);
         this.players = Player.initializePlayers(playerNames);
         this.gameStatus = GameStatus.ACTIVE;
         this.currentPlayerNo = 0;
     }
 
-    public void makeMove() {
-        int diceScore = Dice.rollDice();
-        Player currentPlayer = players.get(currentPlayerNo);
-        int finalPosition = this.board.snakeBite(new Cell(currentPlayer.currentPosition + diceScore));
-        if (finalPosition > 100) finalPosition = currentPlayer.currentPosition;
-        if (finalPosition == 100) {
-            this.gameStatus = GameStatus.ENDED;
-            this.winner = currentPlayer;
-            System.out.println(currentPlayer.getName() + " rolled a " + diceScore + " and moved from " + currentPlayer.currentPosition + " to" + finalPosition);
-            System.out.println(currentPlayer.getName() + " wins the game");
-            return;
-        }
-        System.out.println(currentPlayer.getName() + " rolled a " + diceScore + " and moved from " + currentPlayer.currentPosition + " to" + finalPosition);
-        currentPlayer.currentPosition = finalPosition;
-        updatePlayerTurn();
+    public void updateGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
-    private void updatePlayerTurn() {
-        this.currentPlayerNo = (this.currentPlayerNo + 1 )% this.players.size();
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerNo);
+    }
+
+    public int getJumpCell(int cellId) {
+        return board.getJumpCell(cellId);
+    }
+
+    public void updatePlayerTurn() {
+        this.currentPlayerNo = (this.currentPlayerNo + 1) % this.players.size();
     }
 
     public Board getBoard() {

@@ -7,15 +7,11 @@ public class Snake {
     private int end;
 
     public Snake(int start, int end) {
+        if (start < end) {
+            throw new IllegalArgumentException("start must be greater than end");
+        }
         this.start = start;
         this.end = end;
-    }
-
-    public static int snakeBite(List<Snake> snakes, Cell cell) {
-        for (Snake snake : snakes) {
-            if (cell.id == snake.start) return snake.end;
-        }
-        return cell.id;
     }
 
     public int getStart() {

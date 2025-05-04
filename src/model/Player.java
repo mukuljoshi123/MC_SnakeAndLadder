@@ -27,4 +27,16 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
+    }
+
+    public void moveTo(int currentPosition) {
+        this.currentPosition = currentPosition;
+    }
 }
